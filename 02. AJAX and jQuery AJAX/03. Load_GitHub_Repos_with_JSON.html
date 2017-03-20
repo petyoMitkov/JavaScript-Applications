@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Load GitHub Repos with JSON</title>
+    <script
+        src="https://code.jquery.com/jquery-3.2.0.min.js"
+        integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Load GitHub Repos with JSON</h1>
+
+    <label for="username">GitHub username:</label>
+    <input type="text" id="username" value="petyoMitkov"/>
+    <button onclick="loadReposSecondWay()">Load Repos</button>
+
+    <ul id="repos"></ul>
+
+    <script>
+        //First way solution
+        function loadRepos() {
+            $("#repos").empty();
+            let username = $("#username").val();
+            let url = "https://api.github.com/users/"
+                + username + "/repos";
+
+            $.ajax({ url,
+                success: displayRepos,
+                error: displayError
+            });
+
+            function displayRepos(repos) {
+                //$("#repos").append("<li>200 OK</li>");
+                for (let repo of repos) {
+                    let link = $("<a>").text(repo.full_name);
+                    link.attr("href", repo.html_url);
+                    $("#repos").append($('<li>').append(link));
+                }
+            }
+
+            function displayError(err) {
+                $("#repos").append("<li>GET Request Error! </li>");
+            }
+        }
+
+        //Second way solution
+        function loadReposSecondWay() {
+            $("#repos").empty();
+            let username = $("#username").val();
+
+            $.get("https://api.github.com/users/" + username + "/repos")
+                .then(function(data) {
+                    for (let repo of data) {
+                        let link = $("<a>").text(repo.full_name);
+                        link.attr("href", repo.html_url);
+                        $("#repos").append($("<li>").append(link));
+                    }
+                })
+                .catch(function() {
+                    $("#repos").append($("<li>Error</li>"))
+                });
+        }
+    </script>
+
+</body>
+</html>
