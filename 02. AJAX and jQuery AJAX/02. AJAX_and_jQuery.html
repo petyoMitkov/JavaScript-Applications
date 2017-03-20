@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AJAX and jQuery Example</title>
+    <script
+        src="https://code.jquery.com/jquery-3.2.0.min.js"
+        integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="text">
+    <h1>AJAX jQuery.load() Exapmle</h1>
+    <button onclick="loadTitle()">Load Title</button>
+</div>
+
+<script type="text/javascript">
+    function loadTitle() {
+        $("#text").load("02.1_text.html");
+    }
+</script>
+
+
+</body>
+</html>
