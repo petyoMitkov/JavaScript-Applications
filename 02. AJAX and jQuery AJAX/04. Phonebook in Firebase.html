@@ -3,24 +3,30 @@
 <head>
     <meta charset="utf-8">
     <title>Phonebook in Firebase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" type="text/css" href="Styles/04.2_styles.css">
 </head>
 <body>
-    <h1>Phonebook</h1>
-    <ul id="phonebook"></ul>
-    <button id="btnLoad">Load</button>
-    <br/><br/><br/>
+    <div class="phonebookContainer">
+        <div class="resultDisplay">
+            <h1>Phonebook</h1>
+            <ul id="phonebook"></ul>
+        </div>
+        <button id="btnLoad">Load Contacts</button>
+        <br/>
 
-    <h2>Create Contact</h2>
-    Person:<input type="text" id="person"/>
-    <br/>
-    Phone: <input type="text" id="phone"/>
-    <br/>
-    <br/>
-    <button id="btnCreate">Create</button>
+        <h2>Create Contact</h2>
+        Person:<input type="text" id="person" class="person"/>
+        <br/>
+        Phone: <input type="text" id="phone" class="phone"/>
+        <br/><br/>        
+        <button id="btnCreate">Create New Contact</button>
+    </div>
 
     <script src="04.1_phonebook.js"></script>
 </body>

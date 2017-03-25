@@ -1,0 +1,49 @@
+body {
+    background-color: #EDBB21;
+    margin: 0;
+    padding: 0;
+}
+ul li{
+    list-style-type: decimal;
+    text-align: left;
+}
+ul {   /*for Error message*/
+   padding-right: 35px;
+}
+.resultDisplay {
+    padding: 0px 0px 10px 0px;
+    background-color: #EDEFEB;
+    margin-right: 30%;
+    text-align: center;
+}
+.phonebookContainer {
+    margin-left: 30%;
+}
+#btnLoad, #btnCreate {
+    padding: 2px 50px;
+    background-color: #748274;
+    border-style: none;
+    outline-style: none;
+}
+#btnLoad:hover, #btnCreate:hover {
+    background-color: #A9AAA9;
+}
+.person, .phone {
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .phonebookContainer {
+        margin-left:  2%;
+        margin-right: 2%;
+    }
+    .resultDisplay {
+    padding: 0px 0px 5px 0px;
+    background-color: #EDEFEB;
+    margin-right: 0%;
+    text-align: center;
+    }
+    ul {   /*for Error message*/
+   padding-right: 2%;
+}
+}

@@ -29,8 +29,8 @@ $(function() {
 
     function displayError() {
     	$("#phonebook")
-    	.append($("<div style='background-color: #F8A9AB; display: inline-block'>")
-    		.text("There is an Error!"));
+    	.append($("<div style='background-color: #E62F34; display: inline-block'>")
+    		.text("Error: You try to add new Contact with empty field or there is Database problem."));
     }
 
     function deleteContact(key) {
@@ -54,14 +54,18 @@ $(function() {
             method: "POST",
             url: "https://phonebook-f6ac7.firebaseio.com/phonebook.json", 
             data: JSON.stringify(newContact)
-
         };
+        if (person != "" || phone != "") {
+            $.ajax(newContactRequest)
+                .then(loadContacts)
+                .catch(displayError);
 
-        $.ajax(newContactRequest)
-            .then(loadContacts)
-            .catch(displayError);
+            $("#person").val("");
+            $("#phone").val("");
+        } else {
+            displayError();
+        }
 
-        $("#person").val("");
-        $("#phone").val("");
+
     }
 });
