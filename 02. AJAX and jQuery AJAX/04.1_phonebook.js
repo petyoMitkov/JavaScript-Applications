@@ -1,5 +1,6 @@
 $(function() {
     $("#btnLoad").click(loadContacts);
+    $('#btnCreate').click(createContact);
 
     function loadContacts() {
     	$("#phonebook").empty();
@@ -40,5 +41,27 @@ $(function() {
         $.ajax(delRequest)
             .then(loadContacts)
             .catch(displayError);
+    }
+
+    function createContact() {
+        let person = $("#person").val();
+        let phone = $("#phone").val();
+        let newContact = {
+            person,
+            phone
+        };
+        let newContactRequest = {
+            method: "POST",
+            url: "https://phonebook-f6ac7.firebaseio.com/phonebook.json", 
+            data: JSON.stringify(newContact)
+
+        };
+
+        $.ajax(newContactRequest)
+            .then(loadContacts)
+            .catch(displayError);
+
+        $("#person").val("");
+        $("#phone").val("");
     }
 });
