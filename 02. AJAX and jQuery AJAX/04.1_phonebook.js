@@ -10,13 +10,18 @@ $(function() {
 
     function displayContacts(contacts) {
     	//alert(contacts.contact2.person);
-        let keys = Object.keys(contacts);
+        let keys = Object.keys(contacts);  //get Object keys
         for (let key of keys) {
             let contact = contacts[key];
-            let text = contact.person + ": " + contact.phone;
-            //console.log(text);
-            if (contact.person) {
-                $("<li>").text(text).appendTo("#phonebook");
+            let text = contact.person + ": " + contact.phone + ' ';
+            if (contact.person) {          
+                let li = $("<li>");     
+                li.text(text).appendTo("#phonebook");  //add <li> (contacts) to $phonebook
+
+                li.append(                //add Delete element and append event
+                    $("<a href='#'>[Delete]</a>").click(function() {
+                        deleteContact(key);
+                    }) );            
             }        
         }
     }
@@ -24,6 +29,16 @@ $(function() {
     function displayError() {
     	$("#phonebook")
     	.append($("<div style='background-color: #F8A9AB; display: inline-block'>")
-    		.text("There is an Error! GET Request is broken."));
+    		.text("There is an Error!"));
+    }
+
+    function deleteContact(key) {
+        let delRequest = {
+            method: "DELETE",
+            url: "https://phonebook-f6ac7.firebaseio.com/phonebook/" + key + ".json"
+        };
+        $.ajax(delRequest)
+            .then(loadContacts)
+            .catch(displayError);
     }
 });
