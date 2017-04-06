@@ -1,6 +1,14 @@
+html {
+    background-color: #2B3A47;
+}
 body {
-    background-color: #7F7F82;
+    background-color: #808080;
     color: #FFCD35;
+    width: 60%;
+    margin: 0% 20%;
+}
+footer {
+    margin-top: 300px;
 }
 /*Navigation bar*/
 #menu {
@@ -20,10 +28,18 @@ body {
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
+    color: #050505;
+}
+#menu a:hover {
+    background-color: #C1BDBD;
+}
+#menu a:active {
+    background-color: #5C5C5F;
+    color: #FFFFFF;
 }
 /*Sections and Tables*/
 main > section {
-    /*display: none;*/
+    display: none;
     padding: 20px 5px;
 }
 section h1 {

@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>Book Library</title>
-    <script src="script/jquery-3.2.0.min.js"></script>
-    <script src="script/book-library.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="scripts/jquery-3.2.0.min.js"></script>
+    <script src="scripts/book-library.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/book-library.css">
   </head>
   <body onload="startApp()">
@@ -15,7 +16,7 @@
       <a href="#" id="linkListBooks">List Books</a>
       <a href="#" id="linkCreateBook">Create Book</a>
       <a href="#" id="linkLogout">Logout</a>
-      <span id="loggedInUser">pepi</span>
+      <span id="loggedInUser"></span>
     </header>
     <main>
       <section id="loadingBox">Loading...</section>
@@ -27,6 +28,17 @@
         Welcome to our book library.
       </section>
 
+      <section id="viewLogin">
+        <h1>Please Login</h1>
+        <form id="formLogin">
+          <div>Username:</div>
+          <div><input type="text" name="username" required /></div>
+          <div>Password:</div>
+          <div><input type="text" name="passwd" required /></div>
+          <div><input id="btnLoginUser" type="submit" value="Login"></div>
+        </form>
+      </section>
+
       <section id="viewRegister">
         <h1>Please register here</h1>
         <form id="formRegister">
@@ -34,7 +46,7 @@
           <div><input type="text" name="username" required /></div>
           <div>Password: </div>
           <div><input type="password" name="passwd" required /></div>
-          <div><input type="submit" name="Register" /></div>
+          <div><input id="registerUser" type="submit" name="Register" /></div>
         </form>
       </section>
 
@@ -72,7 +84,7 @@
 
       <section id="viewCreateBook">
         <h1>Create new book</h1>
-        <form>
+        <form id="formCreateBook">
           <div>Title:</div>
           <div><input type="text" name="title" required /></div>
           <div>Author:</div>
@@ -81,7 +93,7 @@
           <div>
             <textarea name="description" rows="10" required></textarea>
           </div>
-          <div><input type="submit" value="Create"></div>
+          <div><input id="createBook" type="submit" value="Create"></div>
         </form>
       </section>
 
@@ -97,7 +109,7 @@
           <div>
             <textarea name="description" rows="10"></textarea>
           </div>
-          <div><input type="submit" value="Edit" /></div>     
+          <div><input id="editBook" type="submit" value="Edit" /></div>     
         </form>
       </section>
     </main>
