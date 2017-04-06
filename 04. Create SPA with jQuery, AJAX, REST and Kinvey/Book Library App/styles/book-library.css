@@ -2,3 +2,66 @@ body {
     background-color: #7F7F82;
     color: #FFCD35;
 }
+/*Navigation bar*/
+#menu {
+    background: #DDD;
+    text-align: center;
+    padding: 5px;
+    line-height: 1.5;
+    border-radius: 3px;
+    overflow: auto;
+}
+#menu > #loggedInUser {
+    float: right;
+    margin-right: 10px;
+    color: green;
+}
+#menu a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+/*Sections and Tables*/
+main > section {
+    /*display: none;*/
+    padding: 20px 5px;
+}
+section h1 {
+    margin: 10px 0px;
+    font-size: 1.2em;
+}
+table th {
+    background: #312B28;
+    padding: 10px;
+}
+table td {
+    padding: 5px 10px;
+    background: #595757;
+}
+/*Loading, Info, Error Boxes*/
+#loadingBox, #infoBox, #errorBox {
+    width: 80%;
+    margin: 10px auto;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+}
+#loadingBox {
+    background-color: #3A5EB6;
+}
+#infoBox {
+    background-color: #24B528;
+}
+#errorBox {
+    background-color: #FF8236;
+}
+/*Footer*/
+footer {
+    background-color: #DDD;
+    color: #362F2F;
+    padding: 10px 10px;
+    font-size: 0.8em;
+    text-align: center;
+    border-radius: 5px;
+}
