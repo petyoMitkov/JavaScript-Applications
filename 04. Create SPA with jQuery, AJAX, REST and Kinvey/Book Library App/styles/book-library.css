@@ -4,8 +4,8 @@ html {
 body {
     background-color: #808080;
     color: #FFCD35;
-    width: 60%;
-    margin: 0% 20%;
+    width: 80%;
+    margin: 0% 10%;
 }
 footer {
     margin-top: 300px;
@@ -39,7 +39,7 @@ footer {
 }
 /*Sections and Tables*/
 main > section {
-    display: none;
+    /*display: none;*/
     padding: 20px 5px;
 }
 section h1 {
