@@ -75,7 +75,7 @@ function startApp() {
         $("#createBook").click(createBook);
         $("#editBook").click(editBook);
 
-        $().submit(function(e) { e.preventDefault() });
+        //$().submit(function(e) { e.preventDefault() });
 
         //Bind the info / error boxes: hide on click
         $("#infoBox, #errorBox").click(function() {
@@ -101,8 +101,6 @@ function startApp() {
         }
         
         function registerUser() {
-            //let fieldName = $("#regName").val();
-            //let fieldPass = $("#regPass").val();
             let userData = {
                 username: $('#formRegister input[name="username"]').val(),
                 password: $('#formRegister input[name="passwd"]').val()
@@ -115,10 +113,42 @@ function startApp() {
                 headers: kinveyAppAuthHeaders,
                 contentType: "application/json",
                 data: JSON.stringify(userData),
-                success: function() { alert("Success Registration!!! \n" + "User: " + userData.username) },
-                error: function() { alert("AJAX Error") }
-            });           
+                success: registerUserSuccess,
+                error: ajaxError
+            }); 
+
+            function registerUserSuccess(userInfo) {
+                //alert("Success Registration!!! \n" + "User: " + userData.username);
+                saveAuthInSession(userInfo);
+                showHideMenuLinks(); 
+                showView("viewBooks"); 
+                showInfoBox("Success Registration!" + "\n" + " User: " + userInfo.username);
+                  
+            }   
+            function saveAuthInSession(userInfo) {
+                let userAuth = userInfo._kmd.authtoken;
+                sessionStorage.setItem("authToken", userAuth);
+
+                let userId = userInfo._id;
+                sessionStorage.setItem("setId", userId);
+
+                let username = userInfo.username;
+                sessionStorage.setItem("username", username);
+
+                $("#loggedInUser").text("Welcome, " + username + "!");
+            }   
+            function showInfoBox(massage) {
+                $('#infoBox').text(massage);
+                $("#infoBox").show();
+                setTimeout(function() {
+                    $("#infoBox").fadeOut(3000);
+                }, 1000);
+            }          
+
         }  
+        function ajaxError() {
+            alert("AJAX Error");
+        }
 
         function createBook() {
            
