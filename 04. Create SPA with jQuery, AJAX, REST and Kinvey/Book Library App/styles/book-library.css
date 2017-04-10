@@ -4,8 +4,8 @@ html {
 body {
     background-color: #808080;
     color: #FFCD35;
-    width: 80%;
-    margin: 0% 10%;
+    width: 70%;
+    margin: 0% 15%;
 }
 footer {
     margin-top: 300px;
@@ -15,7 +15,7 @@ footer {
     background: #DDD;
     text-align: center;
     padding: 5px;
-    line-height: 1.5;
+    line-height: 1.8em;
     border-radius: 3px;
     overflow: auto;
 }
@@ -23,11 +23,13 @@ footer {
     float: right;
     margin-right: 10px;
     color: green;
+    font-size: 1.5em;
 }
 #menu a {
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
+    font-size: 1.5em;
     color: #050505;
 }
 #menu a:hover {
@@ -40,11 +42,14 @@ footer {
 /*Sections and Tables*/
 main > section {
     /*display: none;*/
-    padding: 20px 5px;
+    padding: 0px 5px;
 }
 section h1 {
     margin: 10px 0px;
-    font-size: 1.2em;
+    font-size: 2.2em;
+}
+#viewBooks {
+    margin-left: 10%;
 }
 table th {
     background: #312B28;
@@ -55,13 +60,17 @@ table td {
     background: #595757;
 }
 /*Loading, Info, Error Boxes*/
-#loadingBox, #infoBox, #errorBox {
+#loadingBox, #infoBox, #errorBox, #box {
     width: 80%;
     margin: 10px auto;
     color: white;
     text-align: center;
     padding: 5px;
     border-radius: 5px;
+}
+#box{
+    background-color: #808080;
+    height: 1.125em;
 }
 #loadingBox {
     background-color: #3A5EB6;
@@ -80,4 +89,82 @@ footer {
     font-size: 0.8em;
     text-align: center;
     border-radius: 5px;
+}
+
+/*Responsive*/
+@media screen and (max-width: 950px) {
+    body {
+        background-color: #808080;
+        color: #FFCD35;
+        width: 100%;
+        margin: 0% 0%;
+    }
+    #viewHome {
+        text-align: center;
+        font-size: 1.5em;
+    }
+    #viewHome > h1 {
+        font-size: 3em;
+    }
+}
+@media screen and (max-width: 450px) {
+    
+    /*Navigation bar*/
+    #menu {
+        background: #DDD;
+        text-align: center;
+        padding: 5px;
+        line-height: 1.8em;
+        border-radius: 3px;
+        overflow: auto;
+    }
+    #menu > #loggedInUser {
+        float: right;
+        margin-right: 2px;
+        color: green;
+        font-size: 1.5em;
+    }
+    #menu a {
+        display: block;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 1.5em;
+        color: #050505;
+    }
+    /*Sections and Tables*/
+    #viewHome {
+        text-align: center;
+        font-size: 1.0em;
+    }
+    #viewHome > h1 {
+        font-size: 3em;
+    }
+    form {
+        font-size: 1.5em;
+    }
+    input {
+        /*display: none;*/
+        font-size: 1em;
+        width: 94%;
+
+    }
+    #btnLoginUser, #btnRegisterUser {
+        margin-top: 10%;
+        width: 60%;
+        font-size: 1.2em;
+        margin-left: 20%;
+        margin-right: 20%;
+        border-radius: 50px;
+        border: none;
+        padding: 5px 10px;
+        background-color: #F99A1F;
+        
+    }
+    #viewBooks {
+        margin-left: 0%;
+    }
+    footer {
+        margin-top: 90%;
+    }
 }

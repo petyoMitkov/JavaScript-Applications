@@ -21,7 +21,8 @@
     <main>
       <section id="loadingBox">Loading...</section>
       <section id="infoBox">Info</section>
-      <section id="errorBox">Error</section> 
+      <section id="errorBox">Error</section>
+      <section id="box"></section>
 
       <section id="viewHome">
         <h1>Welcome</h1>
@@ -35,18 +36,18 @@
           <div><input type="text" name="username" required /></div>
           <div>Password:</div>
           <div><input type="password" name="passwd" required /></div>
-          <div><input id="btnLoginUser" type="button" value="Login"></div>
+          <div><input id="btnLoginUser" type="submit" value="Login"></div>
         </form>
       </section>
 
       <section id="viewRegister">
-        <h1>Please register here</h1>
+        <h1>Please Register</h1>
         <form id="formRegister">
           <div>Username:</div>
-          <div><input type="text" id="regName" name="username" required /></div>
+          <div><input type="text" id="regName" name="username" required="true" /></div>
           <div>Password:</div>
-          <div><input type="password" id="regPass" name="passwd" required /></div>
-          <div><input id="btnRegisterUser" type="button" value="Register" /></div>
+          <div><input type="password" id="regPass" name="passwd" required="true" /></div>
+          <div><input id="btnRegisterUser" type="submit" value="Register" /></div>
         </form>
       </section>
 
@@ -113,6 +114,6 @@
         </form>
       </section>
     </main>
-    <footer>Book Library - Simple SPA Application</footer>
+    <footer>Book Library - Simple SPA Application. &copy; Modified by Petyo Mitkov</footer>
   </body>
 </html>

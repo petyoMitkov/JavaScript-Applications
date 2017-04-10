@@ -4,6 +4,7 @@ function startApp() {
     showHideMenuLinks();
     showView("viewHome");
     showViewGroup();
+     
 
     actionsGroup(); 
 
@@ -31,6 +32,10 @@ function startApp() {
         //Hide all views and show the selected view only
         $("main > section").hide();
         $("#" + viewName).show();
+
+        //$("#box").text(" ");
+        $("#box").show();
+       
     }
     function showViewGroup() {
         //Bind the navigation menu links, show views
@@ -43,8 +48,8 @@ function startApp() {
 
         //Show view functions        
         function showHomeView() {
-
             showView("viewHome");
+            
         }
         function showLoginView() {
             showView("viewLogin");
@@ -63,19 +68,19 @@ function startApp() {
             showView("viewCreateBook");
         }
         function showLogoutUser() {
-            alert("Good bay.");
-            showLoginView();
+            //alert("Good bay.");
+            showHomeView();
         }
     }
  
     function actionsGroup() {
         //Bind the form submit actions
-        $("#btnLoginUser").click(loginUser);
-        $("#btnRegisterUser").click(registerUser);
+        $("#viewLogin").submit(loginUser);
+        $("#formRegister").submit(registerUser); //Call the form, not the <input type=button/>
         $("#createBook").click(createBook);
         $("#editBook").click(editBook);
 
-        //$().submit(function(e) { e.preventDefault() });
+        $("#linkLogout").click(logout);
 
         //Bind the info / error boxes: hide on click
         $("#infoBox, #errorBox").click(function() {
@@ -97,15 +102,45 @@ function startApp() {
         };
                      
         //Action functions
-        function loginUser() {
+        function loginUser(event) {
+            event.preventDefault(); // !!!!!! Very importent, do not forget
+            $("#box").hide();
+            let userData = {
+                username: $('#formLogin input[name="username"]').val(),
+                password: $('#formLogin input[name="passwd"]').val()
+            };
+            //console.dir(userData);
+
+            $.ajax({
+                method: "POST",
+                url: kinveyBaseUrl + "user/" + kinveyAppKey + "/login",
+                headers: kinveyAppAuthHeaders,
+                data: JSON.stringify(userData),
+                contentType: "application/json",
+                success: loginSuccess,
+                error: handleAjaxError
+            });
+            //listBooks();
+
+
+            function loginSuccess(userInfo) {
+                saveAuthInSession(userInfo);
+                showHideMenuLinks();
+                showView("viewBooks");
+                showInfoBox("Successul Login!");
+                listBooksFromKinvey();
+            }
         }
         
-        function registerUser() {
+        function registerUser(event) {
+            event.preventDefault(); // !!!!!! Very importent, do not forget
+            $("#box").hide();
             let userData = {
                 username: $('#formRegister input[name="username"]').val(),
                 password: $('#formRegister input[name="passwd"]').val()
             };
-            console.dir(userData);
+
+            //console.dir(userData);
            
             $.ajax({
                 method: "POST",
@@ -114,7 +149,7 @@ function startApp() {
                 contentType: "application/json",
                 data: JSON.stringify(userData),
                 success: registerUserSuccess,
-                error: ajaxError
+                error: handleAjaxError
             }); 
 
             function registerUserSuccess(userInfo) {
@@ -122,10 +157,11 @@ function startApp() {
                 saveAuthInSession(userInfo);
                 showHideMenuLinks(); 
                 showView("viewBooks"); 
-                showInfoBox("Success Registration!" + "\n" + " User: " + userInfo.username);
-                  
-            }   
-            function saveAuthInSession(userInfo) {
+                showInfoBox("Registration Successful!" + "\n" + " User: " + userInfo.username);     
+            }       
+        }  
+        
+        function saveAuthInSession(userInfo) {
                 let userAuth = userInfo._kmd.authtoken;
                 sessionStorage.setItem("authToken", userAuth);
 
@@ -135,19 +171,90 @@ function startApp() {
                 let username = userInfo.username;
                 sessionStorage.setItem("username", username);
 
-                $("#loggedInUser").text("Welcome, " + username + "!");
-            }   
-            function showInfoBox(massage) {
-                $('#infoBox').text(massage);
-                $("#infoBox").show();
-                setTimeout(function() {
-                    $("#infoBox").fadeOut(3000);
-                }, 1000);
-            }          
+                $("#loggedInUser").text("Welcome, " + username + "!");    
+        } 
+        function showInfoBox(massage) {
+            $("#box").hide();        
+            $('#infoBox').text(massage);
+            $("#infoBox").show();
+            $("#infoBox").fadeOut(2500);
+            setTimeout(function() {
+                     $("#box").show(1);
+            }, 2490);       
+        }      
+        function handleAjaxError(response) {
+            let errorMsg = JSON.stringify(response);
+            if (response.readyState === 0)
+                errorMsg = "Cannot connect due to network error.";
+            if (response.responseJSON && response.responseJSON.description )
+                errorMsg = response.responseJSON.description;
 
-        }  
-        function ajaxError() {
-            alert("AJAX Error");
+            showError(errorMsg);
+        }
+        function showError(errorMsg) {
+            $("#errorBox").text("Error: " + errorMsg);
+            $("#errorBox").show();
+            $("#errorBox").fadeOut(10000);
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            $("#loggedInUser").text("");
+            showHideMenuLinks();
+            //showView("viewHome");  // contend in view group functions
+            showInfoBox("Logout Successful");
+        }
+
+        function listBooksFromKinvey() {
+            $("#books").empty();
+            showView("viewBooks");
+
+            $.ajax({
+                method: "GET",
+                url: kinveyBaseUrl + "appdata/" + kinveyAppKey + "/books",
+                headers: getKinveyUserAuthHeaders(),
+                success: loadBooksSuccess,
+                error: handleAjaxError
+            });
+
+            function getKinveyUserAuthHeaders() {
+                return {
+                    "Authorization": "Kinvey " + sessionStorage.getItem("authToken"),
+                };
+            }
+
+            function loadBooksSuccess(books) {
+                showInfoBox("Books loaded.");
+                let booksTable = $(`
+                    <table>
+                        <tr>
+                            <th>Taitle</th>
+                            <th>Author</th>
+                            <th>Descrition</th>
+                            <th>Actions</th>
+                        </tr>
+                    </table>`);
+                
+                for (let book of books) {
+                    appendBookRow(book, booksTable);
+                    $("#books").append(booksTable);
+                }
+
+                function appendBookRow(book, booksTable) {
+                    let links = [];
+                    //TODO: action links
+                    let tr = $(`<tr>`);
+
+                    tr.append(
+                        $("<td>").text(book.title),
+                        $("<td>").text(book.author),
+                        $("<td>").text(book.description),
+                        $("<td>").append(links)
+                    );
+
+                    booksTable.append(tr);
+                }                          
+            }
         }
 
         function createBook() {
