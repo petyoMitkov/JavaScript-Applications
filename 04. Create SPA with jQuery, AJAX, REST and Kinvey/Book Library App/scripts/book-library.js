@@ -77,7 +77,7 @@ function startApp() {
         //Bind the form submit actions
         $("#viewLogin").submit(loginUser);
         $("#formRegister").submit(registerUser); //Call the form, not the <input type=button/>
-        $("#createBook").click(createBook);
+        $("#formCreateBook").submit(createBook);
         $("#editBook").click(editBook);
 
         $("#linkLogout").click(logout);
@@ -171,16 +171,19 @@ function startApp() {
                 let username = userInfo.username;
                 sessionStorage.setItem("username", username);
 
-                $("#loggedInUser").text("Welcome, " + username + "!");    
+                $("#loggedInUser").text("Welcome, " + username + "!"); 
+
+                //count first from other entries
+                sessionStorage.setItem("counterShowBookLoaded", "0");   
         } 
         function showInfoBox(massage) {
             $("#box").hide();        
             $('#infoBox').text(massage);
             $("#infoBox").show();
-            $("#infoBox").fadeOut(2500);
+            $("#infoBox").fadeOut(8500);
             setTimeout(function() {
                      $("#box").show(1);
-            }, 2490);       
+            }, 8490);       
         }      
         function handleAjaxError(response) {
             let errorMsg = JSON.stringify(response);
@@ -217,14 +220,11 @@ function startApp() {
                 error: handleAjaxError
             });
 
-            function getKinveyUserAuthHeaders() {
-                return {
-                    "Authorization": "Kinvey " + sessionStorage.getItem("authToken"),
-                };
-            }
-
             function loadBooksSuccess(books) {
-                showInfoBox("Books loaded.");
+                if (sessionStorage.getItem("counterShowBookLoaded") == 0 ) {
+                    showInfoBox("Books loaded.");   //count first from other entries
+                }
+                sessionStorage.setItem("counterShowBookLoaded", "1");
                 let booksTable = $(`
                     <table>
                         <tr>
@@ -240,7 +240,7 @@ function startApp() {
                     $("#books").append(booksTable);
                 }
 
-                function appendBookRow(book, booksTable) {
+                function appendBookRow (book, booksTable) {
                     let links = [];
                     //TODO: action links
                     let tr = $(`<tr>`);
@@ -257,12 +257,38 @@ function startApp() {
             }
         }
 
-        function createBook() {
-           
+        function getKinveyUserAuthHeaders() {
+                return {
+                    "Authorization": "Kinvey " + sessionStorage.getItem("authToken"),
+                };
         }
-        function editBook() {
-          
+
+        function createBook(event) {
+            event.preventDefault();
+            let bookData = {
+                title: $("#formCreateBook input[name=title]").val(),
+                author: $("#formCreateBook input[name=author]").val(),
+                description: $("#formCreateBook textarea[name=description]").val()
+            };
+
+            $.ajax({
+                method: "POST",
+                url: kinveyBaseUrl + "appdata/" + kinveyAppKey + "/books",
+                headers: getKinveyUserAuthHeaders(),
+                data: bookData,
+                success: createBookSuccess,
+                error: handleAjaxError 
+            });
+
+            function createBookSuccess(response) {
+                listBooksFromKinvey();
+                showInfoBox("Book created.");
+            }
         }
+
+
+        function editBook() {       
+        }        
     }   
      
      
