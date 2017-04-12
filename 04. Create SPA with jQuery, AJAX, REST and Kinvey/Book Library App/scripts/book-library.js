@@ -64,7 +64,7 @@ function startApp() {
             showView("viewBooks");
         }
         function showCreateBook() {
-            //$("#formCreateBook").trigger('reset');
+            $("#formCreateBook").trigger('reset');
             showView("viewCreateBook");
         }
         function showLogoutUser() {
@@ -155,9 +155,10 @@ function startApp() {
             function registerUserSuccess(userInfo) {
                 //alert("Success Registration!!! \n" + "User: " + userData.username);
                 saveAuthInSession(userInfo);
-                showHideMenuLinks(); 
+                showHideMenuLinks();
                 showView("viewBooks"); 
-                showInfoBox("Registration Successful!" + "\n" + " User: " + userInfo.username);     
+                showInfoBox("Registration Successful!" + "\n" + " User: " + userInfo.username); 
+                listBooksFromKinvey();    
             }       
         }  
         
@@ -166,24 +167,21 @@ function startApp() {
                 sessionStorage.setItem("authToken", userAuth);
 
                 let userId = userInfo._id;
-                sessionStorage.setItem("setId", userId);
+                sessionStorage.setItem("userId", userId);
 
                 let username = userInfo.username;
                 sessionStorage.setItem("username", username);
 
-                $("#loggedInUser").text("Welcome, " + username + "!"); 
-
-                //count first from other entries
-                sessionStorage.setItem("counterShowBookLoaded", "0");   
+                $("#loggedInUser").text("Welcome, " + username + "!");  
         } 
         function showInfoBox(massage) {
             $("#box").hide();        
             $('#infoBox').text(massage);
             $("#infoBox").show();
-            $("#infoBox").fadeOut(8500);
+            $("#infoBox").fadeOut(2500);
             setTimeout(function() {
                      $("#box").show(1);
-            }, 8490);       
+            }, 2490);       
         }      
         function handleAjaxError(response) {
             let errorMsg = JSON.stringify(response);
@@ -220,11 +218,7 @@ function startApp() {
                 error: handleAjaxError
             });
 
-            function loadBooksSuccess(books) {
-                if (sessionStorage.getItem("counterShowBookLoaded") == 0 ) {
-                    showInfoBox("Books loaded.");   //count first from other entries
-                }
-                sessionStorage.setItem("counterShowBookLoaded", "1");
+            function loadBooksSuccess(books) {                
                 let booksTable = $(`
                     <table>
                         <tr>
@@ -239,12 +233,23 @@ function startApp() {
                     appendBookRow(book, booksTable);
                     $("#books").append(booksTable);
                 }
+                if (books.length === 0) {
+                    showError("No books in library.");
+                }
 
                 function appendBookRow (book, booksTable) {
                     let links = [];
-                    //TODO: action links
-                    let tr = $(`<tr>`);
+                    if (book._acl.creator === sessionStorage.getItem("userId")) {
+                        let deleteLink = $("<a href='#'>[Delete]</a>")
+                            .click(function() { deleteBookById(book._id); });
+                        let editLink = $("<a href='#'>[Edit]</a>");
+                        links.push(deleteLink);
+                        links.push(" ");
+                        links.push(editLink);
+                    }                  
 
+                    let tr = $(`<tr>`);
+                    
                     tr.append(
                         $("<td>").text(book.title),
                         $("<td>").text(book.author),
@@ -253,14 +258,14 @@ function startApp() {
                     );
 
                     booksTable.append(tr);
-                }                          
+                } 
             }
         }
 
         function getKinveyUserAuthHeaders() {
-                return {
-                    "Authorization": "Kinvey " + sessionStorage.getItem("authToken"),
-                };
+            return {
+                "Authorization": "Kinvey " + sessionStorage.getItem("authToken"),
+            };
         }
 
         function createBook(event) {
@@ -286,6 +291,20 @@ function startApp() {
             }
         }
 
+        function deleteBookById(bookId) {
+            $.ajax({
+                method: "DELETE",
+                url: kinveyBaseUrl + "appdata/" + kinveyAppKey + "/books/" + bookId,
+                headers: getKinveyUserAuthHeaders(),
+                success: deleteBookSuccess,
+                error: handleAjaxError
+            });
+
+            function deleteBookSuccess() {
+                listBooksFromKinvey();
+                showInfoBox("Book deleted.")
+            }
+        }              
 
         function editBook() {       
         }        
