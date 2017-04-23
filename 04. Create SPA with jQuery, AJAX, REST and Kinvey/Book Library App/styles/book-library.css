@@ -58,6 +58,23 @@ table th {
 table td {
     padding: 5px 10px;
     background: #595757;
+    color: #DAD8D8;
+}
+#btnEditBook, #btnDeleteBook {
+    background-color: #F0C165;
+    width: 60px;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 2px 0px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+#btnDeleteBook:hover {
+    background-color: #F7F7F7;
+}
+#btnEditBook:hover  {
+    background-color: #F7F7F7;
 }
 /*Loading, Info, Error Boxes*/
 #loadingBox, #infoBox, #errorBox, #box {

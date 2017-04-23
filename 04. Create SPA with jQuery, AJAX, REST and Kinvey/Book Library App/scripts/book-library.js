@@ -240,9 +240,11 @@ function startApp() {
                 function appendBookRow (book, booksTable) {
                     let links = [];
                     if (book._acl.creator === sessionStorage.getItem("userId")) {
-                        let deleteLink = $("<a href='#'>[Delete]</a>")
+                        // let deleteLink = $("<a href='#'>[Delete]</a>")
+                        let deleteLink = $("<button type='button' id='btnDeleteBook'>Delete</button>")
                             .click(function() { deleteBookById(book._id); });
-                        let editLink = $("<a href='#'>[Edit]</a>");
+                        let editLink = $("<button type='button' id='btnEditBook'>Edit</button>")
+                            .click(function () { loaldBookForEdit(book._id); });
                         links.push(deleteLink);
                         links.push(" ");
                         links.push(editLink);
@@ -304,13 +306,47 @@ function startApp() {
                 listBooksFromKinvey();
                 showInfoBox("Book deleted.")
             }
-        }              
+        }   
 
-        function editBook() {       
-        }        
-    }   
-     
-     
+        function loaldBookForEdit(bookId) {
+            $.ajax({
+                method: "GET",
+                url: kinveyBookUrl = kinveyBaseUrl + "appdata/" + kinveyAppKey + "/books/" + bookId,
+                headers: getKinveyUserAuthHeaders(),
+                success: loadBookForEditSuccess,
+                error: handleAjaxError
+            });
 
+            function loadBookForEditSuccess(book) {
+                $("#formEditBook input[name=id]").val(book._id);
+                $("#formEditBook input[name=title]").val(book.title);
+                $("#formEditBook input[name=author]").val(book.author);
+                $("#formEditBook textarea[name=description]").val(book.description);
+            
+                showView("viewEditBook");
+            }
+        }  
 
+        function editBook(bookId) {
+            let bookData = {
+                title: $("#formEditBook input[name=title]").val(),
+                author: $("#formEditBook input[name=author]").val(),
+                description: $("#formEditBook textarea[name=description]").val()
+            };
+            $.ajax({
+                method: "PUT", 
+                url: kinveyBaseUrl + "appdata/" + kinveyAppKey + "/books/" + $("#formEditBook input[name=id]").val(), 
+                headers: getKinveyUserAuthHeaders(),
+                data: bookData,
+                success: editBookSuccess,
+                error: handleAjaxError
+            });        
+            
+            function editBookSuccess() {
+                listBooksFromKinvey();
+                
+            }
+        }      
+    }      
+    
 }
