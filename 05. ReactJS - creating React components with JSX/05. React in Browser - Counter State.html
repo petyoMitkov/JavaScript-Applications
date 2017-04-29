@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>React in Browser</title>
+	<script src="https://unpkg.com/react/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom/dist/react-dom.js"></script>
+	<script src="https://unpkg.com/babel-standalone"></script>
+</head>
+<body>
+	<div id="app">A React component will be rendered here</div>
+
+	<script type="text/babel">
+		let Counter = React.createClass({
+			getInitialState: function() {
+				return {
+					count: Number(this.props.start),
+					style: {color: "red", width:"50px", display: "inline-block"},
+					styleBg: {background: "#D3CACA", margin: "10px", width:"160px", padding: "10px"}
+
+				}
+			},
+			incrementCount: function() {
+				this.setState({
+					count: this.state.count + 1,
+					style:{color: "green", width:"50px", display: "inline-block"}
+				});
+			},
+			decrementCount: function() {
+				this.setState({
+					count: this.state.count - 1,
+					style:{color: "red", width:"50px", display: "inline-block"}
+				});
+			},
+			render: function() {
+				return <div style={this.state.styleBg}>
+						Count: <b style= {this.state.style}>{this.state.count}</b>
+						<button type="button" onClick={this.incrementCount}>+</button>
+						<button type="button" onClick={this.decrementCount}>-</button>
+					</div>
+			}
+		});
+
+
+		ReactDOM.render(
+				<div>
+					<Counter start="5"/>
+					<Counter start="5"/>
+					<Counter start="5"/>
+				</div> ,
+				document.getElementById('app')
+		);
+	</script>
+	
+</body>
+</html>
